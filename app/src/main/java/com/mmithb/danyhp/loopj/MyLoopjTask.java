@@ -1,8 +1,8 @@
 package com.mmithb.danyhp.loopj;
 
 import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -12,13 +12,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
 public class MyLoopjTask {
     public static final String TAG = "MOVIE_TRIVIA";
-    LinkedList<Movie> movieLinkedList;
+    List<Movie> movieList;
 
     AsyncHttpClient asyncHttpClient;
     RequestParams requestParams;
@@ -36,20 +37,21 @@ public class MyLoopjTask {
         requestParams = new RequestParams();
         this.context = context;
         this.loopjListener = listener;
-        movieLinkedList = new LinkedList<Movie>();
+        movieList = new ArrayList<>();
     }
 
-    public LinkedList<Movie> executeLoopjCall(String queryTerm) {
+    public List<Movie> executeLoopjCall(String queryTerm) {
 
         requestParams.put("s", queryTerm);
         asyncHttpClient.get(BASE_URL, requestParams, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                movieList = MainActivity.movieList;
+                movieList.clear();
                 super.onSuccess(statusCode, headers, response);
                 try {
                     jsonResultBoolean = response.getBoolean("Response");
                     jsonResponse = response.toString();
-                    loopjListener.taskCompleted(jsonResponse);
                     Log.i(TAG, "onSuccess: " + jsonResponse);
                     if (jsonResultBoolean) {
                         jsonArray = response.getJSONArray("Search");
@@ -59,10 +61,13 @@ public class MyLoopjTask {
                             String movieYear = object.getString("Year");
                             String moviePoster = object.getString("Poster");
                             Movie movie = new Movie(movieTitle, movieYear, moviePoster);
-                            movieLinkedList.add(movie);
+                            movieList.add(movie);
                             Log.d(TAG, movieTitle + " - " + movieYear + " - " + moviePoster);
                         }
+                    } else {
+                        Toast.makeText(context, "Error: " + response.getString("Error"), Toast.LENGTH_SHORT).show();
                     }
+                    loopjListener.taskCompleted(jsonResponse);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -76,6 +81,6 @@ public class MyLoopjTask {
                 Log.e(TAG, "onFailure: " + errorResponse);
             }
         });
-        return movieLinkedList;
+        return movieList;
     }
 }

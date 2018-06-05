@@ -1,7 +1,8 @@
 package com.mmithb.danyhp.loopj;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,13 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnLoopjCompleted {
+public class MainActivity extends AppCompatActivity implements OnLoopjCompleted {
 
     private RecyclerView recyclerView;
     private MovieListAdapter movieListAdapter;
-    private LinkedList<Movie> movieLinkedList;
+    public static List<Movie> movieList;
 
     EditText etSearchTerms;
     Button btnSearch;
@@ -31,13 +33,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnSearch = findViewById(R.id.btnSearch);
         tvSearchResults = findViewById(R.id.tvSearchResults);
 
-        btnSearch.setOnClickListener(this);
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String searchTerm = etSearchTerms.getText().toString();
+                etSearchTerms.setText("");
+                // make loopj HTTP call
+                movieList = new ArrayList<>();
+                movieList.addAll(myLoopjTask.executeLoopjCall(searchTerm));
+            }
+        });
 
         myLoopjTask = new MyLoopjTask(this, this);
 
-        movieLinkedList = new LinkedList<>();
-        movieListAdapter = new MovieListAdapter(this, movieLinkedList);
-
+        movieList = new ArrayList<>();
         // RecyclerView and Adapter
         recyclerView = findViewById(R.id.recyclerview);
         updateUI();
@@ -45,27 +54,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View v) {
-        String searchTerm = etSearchTerms.getText().toString();
-        etSearchTerms.setText("");
-        // make loopj HTTP call
-        movieLinkedList = myLoopjTask.executeLoopjCall(searchTerm);
-        movieListAdapter = new MovieListAdapter(this, movieLinkedList);
-        updateUI();
-        movieListAdapter.notifyDataSetChanged();
-
-    }
-
-    @Override
     public void taskCompleted(String results) {
         tvSearchResults.setText(results);
-        movieLinkedList.clear();
+        updateUI();
     }
 
     public void updateUI() {
-        if (!movieLinkedList.isEmpty()) {
+
+        if (!movieList.isEmpty()) {
+            movieListAdapter = new MovieListAdapter(this, movieList);
             LinearLayoutManager llm = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(llm);
+            recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
             recyclerView.setAdapter(movieListAdapter);
         }
     }
