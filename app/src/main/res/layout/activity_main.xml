@@ -29,11 +29,21 @@
 
     </LinearLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="12">
+
+    </android.support.v7.widget.RecyclerView>
+
+
     <TextView
         android:id="@+id/tvSearchResults"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="24dp"
+        android:layout_weight="1"
         android:hint="@string/search_results" />
 
 </LinearLayout>
