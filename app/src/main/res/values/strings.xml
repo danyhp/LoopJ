@@ -3,4 +3,7 @@
     <string name="movie_or_tv_show">Movie or TV Show</string>
     <string name="search">Search</string>
     <string name="search_results">Search Results</string>
+    <string name="title">Title</string>
+    <string name="year">Year</string>
+    <string name="movie_poster">Movie Poster</string>
 </resources>
