@@ -1,4 +1,4 @@
-package com.mmithb.danyhp.loopj;
+package com.mmithb.danyhp.loopj.Service;
 
 import android.content.Context;
 import android.util.Log;
@@ -7,6 +7,8 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.mmithb.danyhp.loopj.MainActivity;
+import com.mmithb.danyhp.loopj.Model.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,19 +20,19 @@ import java.util.List;
 import cz.msebera.android.httpclient.Header;
 
 public class MyLoopjTask {
-    public static final String TAG = "MOVIE_TRIVIA";
-    List<Movie> movieList;
+    private static final String TAG = "MOVIE_TRIVIA";
+    private List<Movie> movieList;
 
-    AsyncHttpClient asyncHttpClient;
-    RequestParams requestParams;
-    Context context;
-    OnLoopjCompleted loopjListener;
+    private AsyncHttpClient asyncHttpClient;
+    private RequestParams requestParams;
+    private Context context;
+    private OnLoopjCompleted loopjListener;
 
-    String API_KEY = "9509b8b5";
-    String BASE_URL = "http://www.omdbapi.com/?apikey=" + API_KEY + "&";
-    String jsonResponse;
-    JSONArray jsonArray;
-    boolean jsonResultBoolean;
+    private String API_KEY = "9509b8b5";
+    private String BASE_URL = "http://www.omdbapi.com/?apikey=" + API_KEY + "&";
+    private String jsonResponse;
+    private JSONArray jsonArray;
+    private boolean jsonResultBoolean;
 
     public MyLoopjTask(Context context, OnLoopjCompleted listener) {
         asyncHttpClient = new AsyncHttpClient();

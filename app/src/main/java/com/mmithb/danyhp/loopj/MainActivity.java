@@ -10,6 +10,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.mmithb.danyhp.loopj.Adapter.MovieListAdapter;
+import com.mmithb.danyhp.loopj.Model.Movie;
+import com.mmithb.danyhp.loopj.Service.MyLoopjTask;
+import com.mmithb.danyhp.loopj.Service.OnLoopjCompleted;
+
 import java.util.ArrayList;
 import java.util.List;
 
