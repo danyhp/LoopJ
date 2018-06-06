@@ -19,7 +19,8 @@
         android:layout_alignParentTop="true"
         android:layout_margin="@dimen/margin_movie_item"
         android:layout_toEndOf="@id/movie_poster"
-        android:hint="@string/title" />
+        android:hint="@string/title"
+        android:textSize="25sp" />
 
     <TextView
         android:id="@+id/movie_year"
@@ -28,7 +29,14 @@
         android:layout_below="@id/movie_title"
         android:layout_margin="@dimen/margin_movie_item"
         android:layout_toEndOf="@id/movie_poster"
-        android:hint="@string/year" />
+        android:hint="@string/year"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/movie_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
 
 </RelativeLayout>

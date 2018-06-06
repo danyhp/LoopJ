@@ -20,7 +20,7 @@ import java.util.List;
 import cz.msebera.android.httpclient.Header;
 
 public class MyLoopjTask {
-    private static final String TAG = "MOVIE_TRIVIA";
+    public static final String TAG = "MOVIE_TRIVIA";
     private List<Movie> movieList;
 
     private AsyncHttpClient asyncHttpClient;
@@ -42,8 +42,7 @@ public class MyLoopjTask {
         movieList = new ArrayList<>();
     }
 
-    public List<Movie> executeLoopjCall(String queryTerm) {
-
+    public void searchMovieLoopj(String queryTerm) {
         requestParams.put("s", queryTerm);
         asyncHttpClient.get(BASE_URL, requestParams, new JsonHttpResponseHandler() {
             @Override
@@ -52,7 +51,7 @@ public class MyLoopjTask {
                 movieList.clear();
                 super.onSuccess(statusCode, headers, response);
                 try {
-                    jsonResultBoolean = response.getBoolean("Response");
+                    jsonResultBoolean = checkResponse(response);
                     jsonResponse = response.toString();
                     Log.i(TAG, "onSuccess: " + jsonResponse);
                     if (jsonResultBoolean) {
@@ -62,19 +61,20 @@ public class MyLoopjTask {
                             String movieTitle = object.getString("Title");
                             String movieYear = object.getString("Year");
                             String moviePoster = object.getString("Poster");
-                            Movie movie = new Movie(movieTitle, movieYear, moviePoster);
+                            String movieId = object.getString("imdbID");
+                            Movie movie = new Movie(movieTitle, movieYear, moviePoster, movieId);
                             movieList.add(movie);
                             Log.d(TAG, movieTitle + " - " + movieYear + " - " + moviePoster);
                         }
+                        loopjListener.taskCompleted(response);
                     } else {
                         Toast.makeText(context, "Error: " + response.getString("Error"), Toast.LENGTH_SHORT).show();
                     }
-                    loopjListener.taskCompleted(jsonResponse);
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
@@ -83,6 +83,37 @@ public class MyLoopjTask {
                 Log.e(TAG, "onFailure: " + errorResponse);
             }
         });
-        return movieList;
+
+    }
+
+    public void searchSpecificMovieLoopj(String queryTerm) {
+        requestParams.put("i", queryTerm);
+        asyncHttpClient.get(BASE_URL, requestParams, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try {
+                    jsonResultBoolean = checkResponse(response);
+                    if (jsonResultBoolean) {
+                        loopjListener.taskCompleted(response);
+                    } else {
+                        Toast.makeText(context, "Error: " + response.getString("Error"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+//        return new Movie(null, null, null);
+    }
+
+    private boolean checkResponse(JSONObject jsonResponse) {
+        try {
+            return jsonResponse.getBoolean("Response");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

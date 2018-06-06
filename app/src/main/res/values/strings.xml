@@ -6,4 +6,14 @@
     <string name="title">Title</string>
     <string name="year">Year</string>
     <string name="movie_poster">Movie Poster</string>
+    <string name="movie_rating">Movie Rating</string>
+    <string name="rating_example">9.9</string>
+    <string name="rated">Rated</string>
+    <string name="runtime">Runtime</string>
+    <string name="genre">Genre</string>
+    <string name="release">Release</string>
+    <string name="plot">Plot</string>
+    <string name="director">Director:</string>
+    <string name="writers">Writers:</string>
+    <string name="stars">Stars:</string>
 </resources>

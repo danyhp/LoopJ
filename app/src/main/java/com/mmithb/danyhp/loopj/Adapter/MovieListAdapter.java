@@ -17,6 +17,8 @@ import java.util.List;
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHolder> {
 
+
+
     private final List<Movie> movieList;
     private LayoutInflater layoutInflater;
     private String noPoster = "https://upmaa-pennmuseum.netdna-ssl.com/collections/images/image_not_available_300.jpg";
@@ -32,7 +34,14 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View mItemView = layoutInflater.inflate(R.layout.movie_item, parent, false);
-        return new MovieViewHolder(mItemView, this);
+        MovieViewHolder holder = new MovieViewHolder(mItemView, this);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        return holder;
     }
 
     @Override
@@ -40,6 +49,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         Movie currentMovie = movieList.get(position);
         holder.movieTitleView.setText(currentMovie.getMovieTitle());
         holder.movieYearView.setText(currentMovie.getMovieYear());
+        holder.movieId.setText(currentMovie.getMovieId());
         if (currentMovie.getMoviePosterUrl().length() < 5) {
             Picasso.with(context)
                     .load(noPoster)
@@ -61,7 +71,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder {
-        final TextView movieTitleView, movieYearView;
+        final TextView movieTitleView, movieYearView, movieId;
         final ImageView moviePosterView;
         final MovieListAdapter movieListAdapter;
 
@@ -70,8 +80,8 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
             movieTitleView = itemView.findViewById(R.id.movie_title);
             movieYearView = itemView.findViewById(R.id.movie_year);
             moviePosterView = itemView.findViewById(R.id.movie_poster);
+            movieId = itemView.findViewById(R.id.movie_id);
             this.movieListAdapter = movieListAdapter;
-
         }
     }
 
